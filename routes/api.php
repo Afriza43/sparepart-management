@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\MasterDataController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DashboardController;
+
 
 
 
@@ -29,6 +31,6 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('transactions', TransactionController::class);
         Route::get('reports', [ReportController::class, 'index']);
 
-        Route::get('dashboard', [App\Http\Controllers\Api\DashboardController::class, 'index']);
+        Route::get('dashboard', [DashboardController::class, 'index']);
     });
 });

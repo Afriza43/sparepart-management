@@ -34,6 +34,35 @@ export default function DashboardLayout() {
         return location.pathname.startsWith(path);
     };
 
+    const handleLogout = async (e: React.MouseEvent) => {
+        e.preventDefault(); // Mencegah reload link biasa
+
+        try {
+            // 1. Request ke Backend untuk hapus token di database
+            // Kita pakai 'api' supaya token otomatis terkirim di header
+            await api.post("/logout");
+        } catch (error) {
+            // Jika error (misal token sudah expired duluan),
+            // biarkan saja, tetap lanjut logout di frontend
+            console.error(
+                "Logout gagal di server, tapi tetap logout di browser.",
+            );
+        } finally {
+            // 2. WAJIB: Hapus token dari penyimpanan browser
+            localStorage.removeItem("token");
+
+            // 3. Redirect paksa ke halaman login
+            // Kita pakai window.location agar halaman fresh reload
+            window.location.href = "/login";
+        }
+    };
+
+    // Cek apakah user sudah login
+    const token = localStorage.getItem("token");
+    if (!token) {
+        return <Navigate to="/login" replace />;
+    }
+
     return (
         <div className="flex h-screen bg-gray-100">
             {/* --- SIDEBAR --- */}
@@ -62,7 +91,10 @@ export default function DashboardLayout() {
                 </nav>
 
                 <div className="p-4 border-t border-gray-200">
-                    <button className="flex items-center gap-3 px-4 py-3 w-full text-sm font-medium text-red-600 hover:bg-red-50 rounded-md">
+                    <button
+                        className="flex items-center gap-3 px-4 py-3 w-full text-sm font-medium text-red-600 hover:bg-red-50 rounded-md"
+                        onClick={handleLogout}
+                    >
                         <LogOut size={20} />
                         Logout
                     </button>
