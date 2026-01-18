@@ -8,7 +8,10 @@ use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DashboardController;
-
+use App\Http\Controllers\Api\BrandController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\VehicleController;
+use App\Http\Controllers\Api\SupplierController;
 
 
 
@@ -32,5 +35,10 @@ Route::prefix('v1')->group(function () {
         Route::get('reports', [ReportController::class, 'index']);
 
         Route::get('dashboard', [DashboardController::class, 'index']);
+
+        Route::apiResource('brands', BrandController::class);
+        Route::apiResource('categories', CategoryController::class);
+        Route::apiResource('vehicles', VehicleController::class);
+        Route::apiResource('suppliers', SupplierController::class);
     });
 });

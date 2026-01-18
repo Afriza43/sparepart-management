@@ -13,6 +13,10 @@ import ReportPage from "./components/ReportPage";
 import TransactionList from "./components/TransactionList";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
+import BrandPage from "./components/BrandPage";
+import CategoryPage from "./components/CategoryPage";
+import VehiclePage from "./components/VehiclePage";
+import SupplierPage from "./components/SupplierPage";
 
 function App() {
     const isAuthenticated = localStorage.getItem("token");
@@ -55,6 +59,10 @@ function App() {
                         path="/transactions/create"
                         element={<TransactionForm />}
                     />
+                    <Route path="/brands" element={<BrandPage />} />
+                    <Route path="/categories" element={<CategoryPage />} />
+                    <Route path="/vehicles" element={<VehiclePage />} />
+                    <Route path="/suppliers" element={<SupplierPage />} />
 
                     <Route path="/reports" element={<ReportPage />} />
                 </Route>

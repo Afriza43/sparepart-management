@@ -27,6 +27,22 @@ export default function DashboardLayout() {
             icon: <Box size={20} />,
         },
         { name: "Laporan", path: "/reports", icon: <FileText size={20} /> },
+        {
+            name: "Kelola Supplier",
+            path: "/suppliers",
+            icon: <Box size={20} />,
+        },
+        { name: "List Merk", path: "/brands", icon: <FileText size={20} /> },
+        {
+            name: "List Kendaraan",
+            path: "/vehicles",
+            icon: <FileText size={20} />,
+        },
+        {
+            name: "List Kategori",
+            path: "/categories",
+            icon: <FileText size={20} />,
+        },
     ];
 
     const isActive = (path) => {
