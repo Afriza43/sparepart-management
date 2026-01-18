@@ -43,6 +43,15 @@ export default function SparepartList() {
     if (error)
         return <div className="p-5 text-center text-red-500">{error}</div>;
 
+    const formatRupiah = (value) => {
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0, // Menghilangkan desimal ,00 di belakang
+            maximumFractionDigits: 0,
+        }).format(value);
+    };
+
     return (
         <div className="p-6 bg-gray-50 min-h-screen">
             <div className="max-w-7xl mx-auto">
@@ -111,9 +120,9 @@ export default function SparepartList() {
                                         <td className="px-5 py-4 text-sm text-gray-600">
                                             {item.brand?.name || "-"}
                                         </td>
-                                        <td className="px-5 py-4 text-sm">
+                                        <td className="px-5 py-4 text-sm text-center">
                                             <span className="bg-green-100 text-green-800 py-1 px-3 text-xs">
-                                                {item.category?.price}
+                                                {formatRupiah(item.price)}
                                             </span>
                                         </td>
                                         <td className="px-5 py-4 text-center">
@@ -139,7 +148,7 @@ export default function SparepartList() {
                                                 onClick={() =>
                                                     handleDelete(
                                                         item.id,
-                                                        item.name
+                                                        item.name,
                                                     )
                                                 }
                                             >

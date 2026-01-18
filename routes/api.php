@@ -6,20 +6,29 @@ use App\Http\Controllers\Api\SparepartController;
 use App\Http\Controllers\Api\MasterDataController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\ReportController;
+use App\Http\Controllers\Api\AuthController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
 
 Route::prefix('v1')->group(function () {
-    Route::apiResource('spareparts', SparepartController::class);
-    Route::get('master-data', [MasterDataController::class, 'index']);
-    Route::delete('spareparts/{id}', [SparepartController::class, 'destroy']);
-    Route::put('spareparts/{id}', [SparepartController::class, 'update']);
+    Route::post('login', [AuthController::class, 'login']);
 
-    Route::apiResource('transactions', TransactionController::class);
-    Route::get('reports', [ReportController::class, 'index']);
+    Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('dashboard', [App\Http\Controllers\Api\DashboardController::class, 'index']);
+        // Fitur User
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::get('user', function (Request $request) {
+            return $request->user();
+        });
+
+        Route::apiResource('spareparts', SparepartController::class);
+        Route::get('master-data', [MasterDataController::class, 'index']);
+        Route::delete('spareparts/{id}', [SparepartController::class, 'destroy']);
+        Route::put('spareparts/{id}', [SparepartController::class, 'update']);
+
+        Route::apiResource('transactions', TransactionController::class);
+        Route::get('reports', [ReportController::class, 'index']);
+
+        Route::get('dashboard', [App\Http\Controllers\Api\DashboardController::class, 'index']);
+    });
 });
