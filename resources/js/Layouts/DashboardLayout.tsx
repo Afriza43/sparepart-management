@@ -11,6 +11,11 @@ import {
     LogOut,
     User,
     FileText,
+    BusFront,
+    Tags,
+    ChartBarStacked,
+    Container,
+    Cog,
 } from "lucide-react";
 import {} from "react/jsx-runtime";
 
@@ -20,7 +25,7 @@ export default function DashboardLayout() {
     // Menu Navigasi Samping
     const menus = [
         { name: "Dashboard", path: "/", icon: <LayoutDashboard size={20} /> },
-        { name: "Sparepart", path: "/spareparts", icon: <Package size={20} /> },
+        { name: "Sparepart", path: "/spareparts", icon: <Cog size={20} /> },
         {
             name: "Kelola Barang",
             path: "/transactions",
@@ -30,18 +35,18 @@ export default function DashboardLayout() {
         {
             name: "Kelola Supplier",
             path: "/suppliers",
-            icon: <Box size={20} />,
+            icon: <Container size={20} />,
         },
-        { name: "List Merk", path: "/brands", icon: <FileText size={20} /> },
+        { name: "List Merk", path: "/brands", icon: <Tags size={20} /> },
         {
             name: "List Kendaraan",
             path: "/vehicles",
-            icon: <FileText size={20} />,
+            icon: <BusFront size={20} />,
         },
         {
             name: "List Kategori",
             path: "/categories",
-            icon: <FileText size={20} />,
+            icon: <ChartBarStacked size={20} />,
         },
     ];
 
