@@ -13,7 +13,12 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Api\SupplierController;
 
-
+Route::get('/login', function () {
+    return response()->json([
+        'status' => 'error',
+        'message' => 'Unauthorized. Silakan login kembali.'
+    ], 401);
+})->name('login');
 
 Route::prefix('v1')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
