@@ -15,14 +15,25 @@ class VehicleController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required|string|max:255']);
+        // Hapus 'name', fokus ke 3 kolom ini
+        $request->validate([
+            'nopol' => 'required|string|max:20',    // Wajib diisi sebagai ID utama
+            'bus_code' => 'nullable|string|max:50',
+            'model' => 'nullable|string|max:100',
+        ]);
+
         $vehicle = Vehicle::create($request->all());
         return response()->json(['message' => 'Kendaraan berhasil disimpan', 'data' => $vehicle]);
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate(['name' => 'required|string|max:255']);
+        $request->validate([
+            'nopol' => 'required|string|max:20',
+            'bus_code' => 'nullable|string|max:50',
+            'model' => 'nullable|string|max:100',
+        ]);
+
         $vehicle = Vehicle::findOrFail($id);
         $vehicle->update($request->all());
         return response()->json(['message' => 'Kendaraan berhasil diupdate', 'data' => $vehicle]);

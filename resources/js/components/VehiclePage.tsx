@@ -7,7 +7,15 @@ export default function VehiclePage() {
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
-    const [formData, setFormData] = useState({ id: null, name: "" });
+
+    // UPDATE 1: Sesuaikan state dengan kolom database Anda
+    const [formData, setFormData] = useState({
+        id: null,
+        nopol: "",
+        bus_code: "",
+        model: "",
+    });
+
     const [error, setError] = useState(null);
 
     const fetchData = async () => {
@@ -28,14 +36,21 @@ export default function VehiclePage() {
 
     const handleOpenCreate = () => {
         setIsEditMode(false);
-        setFormData({ id: null, name: "" });
+        // UPDATE 2: Reset semua field baru
+        setFormData({ id: null, nopol: "", bus_code: "", model: "" });
         setError(null);
         setIsModalOpen(true);
     };
 
     const handleOpenEdit = (item) => {
         setIsEditMode(true);
-        setFormData({ id: item.id, name: item.name });
+        // UPDATE 3: Isi data saat edit
+        setFormData({
+            id: item.id,
+            nopol: item.nopol || "",
+            bus_code: item.bus_code || "",
+            model: item.model || "",
+        });
         setError(null);
         setIsModalOpen(true);
     };
@@ -55,11 +70,9 @@ export default function VehiclePage() {
         e.preventDefault();
         try {
             if (isEditMode) {
-                await api.put(`/vehicles/${formData.id}`, {
-                    name: formData.name,
-                });
+                await api.put(`/vehicles/${formData.id}`, formData);
             } else {
-                await api.post("/vehicles", { name: formData.name });
+                await api.post("/vehicles", formData);
             }
             setIsModalOpen(false);
             fetchData();
@@ -90,14 +103,15 @@ export default function VehiclePage() {
                                 <th className="px-5 py-3 text-left text-xs text-gray-600 uppercase tracking-wider w-20">
                                     No.
                                 </th>
-                                <th className="px-5 py-3 text-left text-xs text-gray-600 uppercase tracking-wider">
-                                    Kode
-                                </th>
+                                {/* UPDATE 4: Header Tabel Disesuaikan */}
                                 <th className="px-5 py-3 text-left text-xs text-gray-600 uppercase tracking-wider">
                                     No. Polisi
                                 </th>
                                 <th className="px-5 py-3 text-left text-xs text-gray-600 uppercase tracking-wider">
-                                    Model Kendaraan
+                                    Kode Bus
+                                </th>
+                                <th className="px-5 py-3 text-left text-xs text-gray-600 uppercase tracking-wider">
+                                    Model
                                 </th>
                                 <th className="px-5 py-3 text-center text-xs text-gray-600 uppercase tracking-wider w-40">
                                     Aksi
@@ -108,7 +122,7 @@ export default function VehiclePage() {
                             {loading ? (
                                 <tr>
                                     <td
-                                        colSpan="3"
+                                        colSpan="5"
                                         className="p-5 text-center text-gray-500"
                                     >
                                         Memuat data...
@@ -117,7 +131,7 @@ export default function VehiclePage() {
                             ) : data.length === 0 ? (
                                 <tr>
                                     <td
-                                        colSpan="3"
+                                        colSpan="5"
                                         className="p-5 text-center text-gray-500"
                                     >
                                         Belum ada data.
@@ -132,14 +146,15 @@ export default function VehiclePage() {
                                         <td className="px-5 py-4 text-sm text-gray-600">
                                             {index + 1}
                                         </td>
-                                        <td className="px-5 py-4 text-sm text-gray-900 font-semibold">
-                                            {item.bus_code}
-                                        </td>
-                                        <td className="px-5 py-4 text-sm text-gray-900 font-semibold">
+                                        {/* UPDATE 5: Isi Tabel Disesuaikan */}
+                                        <td className="px-5 py-4 text-sm text-gray-900 font-bold">
                                             {item.nopol}
                                         </td>
-                                        <td className="px-5 py-4 text-sm text-gray-900 font-semibold">
-                                            {item.model}
+                                        <td className="px-5 py-4 text-sm text-blue-600 font-mono">
+                                            {item.bus_code || "-"}
+                                        </td>
+                                        <td className="px-5 py-4 text-sm text-gray-600">
+                                            {item.model || "-"}
                                         </td>
                                         <td className="px-5 py-4 text-center text-sm">
                                             <button
@@ -167,6 +182,7 @@ export default function VehiclePage() {
                 </div>
             </div>
 
+            {/* UPDATE 6: MODAL FORM DISESUAIKAN */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm transition-all duration-300">
                     <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
@@ -189,25 +205,67 @@ export default function VehiclePage() {
                                     {error}
                                 </div>
                             )}
-                            <div className="mb-5">
+
+                            {/* INPUT NOPOL (UTAMA) */}
+                            <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Nama Kendaraan
+                                    Nomor Polisi{" "}
+                                    <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                     type="text"
-                                    value={formData.name}
+                                    value={formData.nopol}
                                     onChange={(e) =>
                                         setFormData({
                                             ...formData,
-                                            name: e.target.value,
+                                            nopol: e.target.value,
                                         })
                                     }
-                                    className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                                    placeholder="Contoh: Mesin, Oli"
+                                    className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none font-mono uppercase"
+                                    placeholder="Contoh: B 1234 XX"
                                     autoFocus
                                     required
                                 />
                             </div>
+
+                            {/* INPUT BUS CODE */}
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Kode Lambung / Bus Code
+                                </label>
+                                <input
+                                    type="text"
+                                    value={formData.bus_code}
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            bus_code: e.target.value,
+                                        })
+                                    }
+                                    className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none"
+                                    placeholder="Contoh: BUS-01"
+                                />
+                            </div>
+
+                            {/* INPUT MODEL */}
+                            <div className="mb-5">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Model / Merk
+                                </label>
+                                <input
+                                    type="text"
+                                    value={formData.model}
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            model: e.target.value,
+                                        })
+                                    }
+                                    className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none"
+                                    placeholder="Contoh: Mercedes Benz OH 1626"
+                                />
+                            </div>
+
                             <div className="flex justify-end space-x-3">
                                 <button
                                     type="button"

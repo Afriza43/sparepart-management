@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Category;
 
@@ -16,7 +17,10 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate(['name' => 'required|string|max:255']);
-        $category = Category::create($request->all());
+        $category = Category::create([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name) // <--- Ini SOLUSINYA
+        ]);
         return response()->json(['message' => 'Kategori berhasil disimpan', 'data' => $category]);
     }
 
@@ -24,7 +28,10 @@ class CategoryController extends Controller
     {
         $request->validate(['name' => 'required|string|max:255']);
         $category = Category::findOrFail($id);
-        $category->update($request->all());
+        $category->update([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name)
+        ]);
         return response()->json(['message' => 'Kategori berhasil diupdate', 'data' => $category]);
     }
 
